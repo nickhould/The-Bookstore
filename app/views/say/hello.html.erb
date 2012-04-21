@@ -1,0 +1,13 @@
+<h1>Hello</h1>
+<p><%= @time %></p>
+<%= link_to "Goodbye", say_goodbye_path %>
+
+<p>2 + 2 = <%= 2+2 %></p>
+<p>Cow + Boy= <%= "Cow"+"Boy" %></p>
+<p>1 jour from now = <%= 1.hour.from_now %></p>
+
+<ul>
+<% for file in @files %>
+<li>File name is <%= file %></li>
+<% end %>
+</ul>
