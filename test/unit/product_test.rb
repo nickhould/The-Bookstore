@@ -40,8 +40,7 @@ class ProductTest < ActiveSupport::TestCase
                 :image_url   => image_url)
   end
   
-  test "image url" do
-    
+  test "image url" do 
     ok = %w{ fred.gif fred.jpg fred.png FRED.GIF FRED.Jpg
            htt://abc.com/its/michael.gif }
     bad= %w{ fred.doc fred.gif/more fred.gif.more }
@@ -55,12 +54,21 @@ class ProductTest < ActiveSupport::TestCase
     end           
   end
   
+  test "product title is at least 10 characters long" do
+    product = Product.new(:title       => 'abc',
+                          :description => "My description.",
+                          :price       => 1,
+                          :image_url   => 'fred.png')           
+    assert product.invalid?
+    assert_equal "must be greater than or equal to 0.01",
+                 product.errors[:price].join('; ')
+  end
+  
   test "product is not valid without a unique title" do
-    product = Product.new(:title    => products(:ruby).title,
-                :description => "My description.",
-                :price => 1,
-                :image_url   => 'fred.png')
-                
+    product = Product.new(:title       => "abc",
+                          :description => "My description.",
+                          :price       => 1,
+                          :image_url   => 'fred.png') 
     assert !product.save
     assert_equal 'has already been taken', product.errors[:title].join('; ')
   end
@@ -68,15 +76,11 @@ class ProductTest < ActiveSupport::TestCase
   
   test "product is not valid without a unique title - i18n" do
     product = Product.new(:title    => products(:ruby).title,
-                :description => "My description.",
-                :price => 1,
-                :image_url   => 'fred.jpg')
+                          :description => "My description.",
+                          :price => 1,
+                          :image_url   => 'fred.jpg')
                 
-    assert !product.save
-    assert_equal 'has already been taken', product.errors[:title].join('; ')
-  
-  
-  
+    assert !product.save  
     assert_equal I18n.translate('activerecord.errors.messages.taken'),
                  product.errors[:title].join('; ')
                
